@@ -19,6 +19,7 @@ namespace Mmm.Iot.TenantManager.Services.Models
             this.RowKey = id;
             this.TenantId = id;
             this.IotHubName = string.Empty;
+            this.DpsName = string.Empty;
             this.SAJobName = string.Empty;
             this.IsIotHubDeployed = false;
             this.TenantName = string.Empty;
@@ -27,6 +28,8 @@ namespace Mmm.Iot.TenantManager.Services.Models
         public string TenantId { get; set; }
 
         public string IotHubName { get; set; }
+
+        public string DpsName { get; set; }
 
         public string SAJobName { get; set; }
 

@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Mmm.Iot.Common.Services.Auth;
 using Mmm.Iot.Common.Services.Config;
+using Mmm.Iot.TenantManager.Services.Tasks;
 
 namespace Mmm.Iot.TenantManager.WebService
 {

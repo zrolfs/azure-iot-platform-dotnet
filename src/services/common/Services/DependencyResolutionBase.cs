@@ -55,6 +55,10 @@ namespace Mmm.Iot.Common.Services
             builder.RegisterType<TimeSeriesClient>().As<ITimeSeriesClient>().SingleInstance();
             builder.RegisterType<CloudTableClientFactory>().As<ICloudTableClientFactory>().SingleInstance();
             builder.RegisterType<TableStorageClient>().As<ITableStorageClient>().SingleInstance();
+            builder.RegisterType<IoTHubManagementClientFactory>().As<IIoTHubManagementClientFactory>().SingleInstance();
+            builder.RegisterType<IoTHubManagementClient>().As<IIoTHubManagementClient>().SingleInstance();
+            builder.RegisterType<AzureManagementClientFactory>().As<IAzureManagementClientFactory>().SingleInstance();
+            builder.RegisterType<AzureManagementClient>().As<IAzureManagementClient>().SingleInstance();
             builder.RegisterType<BlobStorageClient>().As<IBlobStorageClient>().SingleInstance();
             this.SetupCustomRules(builder);
             var container = builder.Build();

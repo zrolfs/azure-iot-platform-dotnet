@@ -92,10 +92,9 @@ namespace Mmm.Iot.TenantManager.Services
 
             // Create a new tenant and save it to table storage
             var tenant = new TenantModel(tenantId);
+            tenant.IotHubName = iotHubName;
+            tenant.DpsName = dpsName;
             await this.tableStorageClient.InsertAsync<TenantModel>(TenantTableId, tenant);
-
-            // kick off provisioning runbooks
-            await this.runbookHelper.CreateIotHub(tenantId, iotHubName, dpsName);
 
             // Give the requesting user an admin role to the new tenant
             try
