@@ -12,25 +12,41 @@ using Microsoft.Azure.Documents.SystemFunctions;
 using Microsoft.Azure.Management.Fluent;
 using Microsoft.Azure.Management.IotHub;
 using Microsoft.Azure.Management.IotHub.Models;
-using Microsoft.Azure.Management.ResourceManager.Fluent.Models;
+using Microsoft.Azure.Management.ResourceManager.Fluent;
+using Microsoft.Azure.Management.ResourceManager.Models;
 using Microsoft.Rest.Azure;
 using Microsoft.Rest.ClientRuntime;
 using Mmm.Iot.Common.Services.Config;
+using Mmm.Iot.Common.Services.Exceptions;
+using Mmm.Iot.Common.Services.External.TableStorage;
 using Mmm.Iot.Common.Services.Models;
 using Newtonsoft.Json.Linq;
+using DeploymentMode = Microsoft.Azure.Management.ResourceManager.Fluent.Models.DeploymentMode;
 
-namespace Mmm.Iot.Common.Services.External.TableStorage
+namespace Mmm.Iot.Common.Services.External.Azure
 {
     public class AzureManagementClient : IAzureManagementClient
     {
         private readonly IAzure client;
         private readonly AppConfig config;
+        private ResourceManagementClient rmClient;
 
         public AzureManagementClient(IAzureManagementClientFactory clientFactory, AppConfig config)
         {
             this.client = clientFactory.Create();
             this.config = config;
+            this.rmClient = (ResourceManagementClient)this.client.ManagementClients.FirstOrDefault(t =>
+                t.GetType() == typeof(ResourceManagementClient));
+            this.IotHubManagementClient = clientFactory.CreateIoTHubManagementClient();
+            this.DpsManagmentClient = new DpsManagementClient(this.rmClient, this.config);
+            this.AsaManagementClient = clientFactory.CreateAsaManagementClient();
         }
+
+        public IoTHubManagementClient IotHubManagementClient { get; }
+
+        public DpsManagementClient DpsManagmentClient { get; }
+
+        public AsaManagementClient AsaManagementClient { get; }
 
         public async Task<StatusResultServiceModel> StatusAsync()
         {

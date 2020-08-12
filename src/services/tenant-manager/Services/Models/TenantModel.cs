@@ -22,6 +22,7 @@ namespace Mmm.Iot.TenantManager.Services.Models
             this.DpsName = string.Empty;
             this.SAJobName = string.Empty;
             this.IsIotHubDeployed = false;
+            this.MarkedForDeletion = false;
             this.TenantName = string.Empty;
         }
 
@@ -34,6 +35,8 @@ namespace Mmm.Iot.TenantManager.Services.Models
         public string SAJobName { get; set; }
 
         public bool IsIotHubDeployed { get; set; }
+
+        public bool MarkedForDeletion { get; set; }
 
         public string TenantName { get; set; }
     }

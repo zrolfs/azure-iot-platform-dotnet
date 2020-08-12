@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Mmm.Iot.Common.Services.Config;
 using Mmm.Iot.Common.Services.External.AppConfiguration;
+using Mmm.Iot.Common.Services.External.Azure;
 using Mmm.Iot.Common.Services.External.BlobStorage;
 using Mmm.Iot.Common.Services.External.TableStorage;
 using Mmm.Iot.TenantManager.Services.Models;
@@ -25,16 +26,14 @@ namespace Mmm.Iot.TenantManager.Services.Tasks
         private readonly CancellationTokenSource stoppingCts = new CancellationTokenSource();
         private Task executingTask;
         private ITableStorageClient tableStorageClient;
-        private IIoTHubManagementClient ioTHubManagementClient;
         private IBlobStorageClient blobStorageClient;
         private IAzureManagementClient azureManagementClient;
         private IAppConfigurationClient appConfigurationClient;
         private AppConfig config;
 
-        public IoTHubMonitor(ITableStorageClient tableStorageClient, IIoTHubManagementClient ioTHubManagementClient, IBlobStorageClient blobStorageClient, IAzureManagementClient azureManagementClient, IAppConfigurationClient appConfigurationClient, AppConfig config)
+        public IoTHubMonitor(ITableStorageClient tableStorageClient, IBlobStorageClient blobStorageClient, IAzureManagementClient azureManagementClient, IAppConfigurationClient appConfigurationClient, AppConfig config)
         {
             this.tableStorageClient = tableStorageClient;
-            this.ioTHubManagementClient = ioTHubManagementClient;
             this.blobStorageClient = blobStorageClient;
             this.azureManagementClient = azureManagementClient;
             this.appConfigurationClient = appConfigurationClient;
@@ -108,12 +107,12 @@ namespace Mmm.Iot.TenantManager.Services.Tasks
                             {
                                 await this.blobStorageClient.CreateBlobContainerIfNotExistsAsync(item.TenantId + "-iot-file-upload");
                                 Console.WriteLine("File Upload Container Made");
-                                IotHubDescription iothub = await this.ioTHubManagementClient.RetrieveAsync(item.IotHubName, stoppingToken);
+                                IotHubDescription iothub = await this.azureManagementClient.IotHubManagementClient.RetrieveAsync(item.IotHubName, stoppingToken);
 
                                 if (iothub.Properties.State == "Active")
                                 {
                                     Console.WriteLine("IoT Hub found");
-                                    var connectionString = this.ioTHubManagementClient.GetConnectionString(iothub.Name);
+                                    var connectionString = this.azureManagementClient.IotHubManagementClient.GetConnectionString(iothub.Name);
                                     await this.appConfigurationClient.SetValueAsync($"tenant:{item.TenantId}:iotHubConnectionString", connectionString);
                                     Assembly assembly = Assembly.GetExecutingAssembly();
                                     StreamReader reader = new StreamReader(assembly.GetManifestResourceStream("dps.json"));

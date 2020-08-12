@@ -10,10 +10,12 @@ using Microsoft.Azure.Cosmos.Table;
 using Microsoft.Azure.Management.IotHub.Models;
 using Microsoft.Rest.Azure;
 
-namespace Mmm.Iot.Common.Services.External.TableStorage
+namespace Mmm.Iot.Common.Services.External.Azure
 {
     public interface IIoTHubManagementClient : IStatusOperation
     {
+        Task DeleteAsync(string iotHubName, CancellationToken token);
+
         Task<IotHubDescription> RetrieveAsync(string iotHubName, CancellationToken token);
 
         IPage<SharedAccessSignatureAuthorizationRule> ListKeysAsync(string iotHubName);

@@ -16,17 +16,18 @@ using Microsoft.Rest.ClientRuntime;
 using Mmm.Iot.Common.Services.Config;
 using Mmm.Iot.Common.Services.Models;
 
-namespace Mmm.Iot.Common.Services.External.TableStorage
+namespace Mmm.Iot.Common.Services.External.Azure
 {
     public class IoTHubManagementClient : IIoTHubManagementClient
     {
         private readonly IotHubClient client;
         private readonly AppConfig config;
 
-        public IoTHubManagementClient(IIoTHubManagementClientFactory clientFactory, AppConfig config)
+        public IoTHubManagementClient(IotHubClient client, AppConfig config)
         {
-            this.client = clientFactory.Create();
+            this.client = client;
             this.config = config;
+            this.client.SubscriptionId = this.config.Global.SubscriptionId;
         }
 
         public async Task<StatusResultServiceModel> StatusAsync()
@@ -43,6 +44,11 @@ namespace Mmm.Iot.Common.Services.External.TableStorage
             {
                 return new StatusResultServiceModel(false, $"Table Storage status check failed: {e.Message}");
             }
+        }
+
+        public async Task DeleteAsync(string iotHubName, CancellationToken token)
+        {
+            await this.client.IotHubResource.BeginDeleteAsync(this.config.Global.ResourceGroup, iotHubName, token != null ? token : CancellationToken.None);
         }
 
         public async Task<IotHubDescription> RetrieveAsync(string iotHubName, CancellationToken token)
