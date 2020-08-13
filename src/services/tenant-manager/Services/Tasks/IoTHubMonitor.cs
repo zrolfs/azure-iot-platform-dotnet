@@ -1,5 +1,6 @@
 // <copyright file="IoTHubMonitor.cs" company="3M">
 // Copyright (c) 3M. All rights reserved.
+// Designed to Monitor the tenant table for new tenants and complete the infrastructure deployments
 // </copyright>
 
 using System;
