@@ -64,7 +64,7 @@ namespace Mmm.Iot.Common.Services.External.Azure
             }
         }
 
-        public void DeployTemplateAsync(string template, string resourceGroup = null, string deploymentName = null)
+        public async Task DeployTemplateAsync(string template, string resourceGroup = null, string deploymentName = null)
         {
             template = JObject.Parse(template).ToString();
             if (resourceGroup == null)
@@ -77,12 +77,12 @@ namespace Mmm.Iot.Common.Services.External.Azure
                 deploymentName = Guid.Empty.ToString();
             }
 
-            this.client.Deployments.Define(deploymentName)
+            var result = await this.client.Deployments.Define(deploymentName)
                 .WithExistingResourceGroup(resourceGroup)
                 .WithTemplate(template)
                 .WithParameters("{}")
                 .WithMode(DeploymentMode.Incremental)
-                .CreateAsync();
+                .BeginCreateAsync();
         }
     }
 }

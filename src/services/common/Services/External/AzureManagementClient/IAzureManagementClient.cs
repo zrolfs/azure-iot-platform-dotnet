@@ -21,6 +21,6 @@ namespace Mmm.Iot.Common.Services.External.Azure
 
         AsaManagementClient AsaManagementClient { get; }
 
-        void DeployTemplateAsync(string template, string resourceGroup = null, string deploymentName = null);
+        Task DeployTemplateAsync(string template, string resourceGroup = null, string deploymentName = null);
     }
 }

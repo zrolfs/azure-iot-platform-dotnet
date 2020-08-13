@@ -61,10 +61,25 @@ namespace Mmm.Iot.Common.Services.External.Azure
             return this.client.IotHubResource.ListKeys(this.config.Global.ResourceGroup, iotHubName);
         }
 
-        public string GetConnectionString(string iotHubName)
+        public string GetAccessKey(string iotHubName, string name)
         {
             var keys = this.ListKeysAsync(iotHubName);
-            return $"HostName={iotHubName}.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey={keys.Where(t => t.KeyName == "iothubowner").FirstOrDefault().PrimaryKey}";
+            return keys.Where(t => t.KeyName == "iothubowner").FirstOrDefault().PrimaryKey;
+        }
+
+        public string GetConnectionString(string iotHubName)
+        {
+            return $"HostName={iotHubName}.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey={this.GetAccessKey(iotHubName, "iothubowner")}";
+        }
+
+        public void AddConsumerGroup(string iotHubName, string endpointName, string name, string resourceGroup = null)
+        {
+            if (resourceGroup == null)
+            {
+                resourceGroup = this.config.Global.ResourceGroup;
+            }
+
+            this.client.IotHubResource.CreateEventHubConsumerGroup(resourceGroup, iotHubName, endpointName, name);
         }
     }
 }

@@ -21,5 +21,9 @@
       <Link>Tasks\ARMTemplates\dps.json</Link>
       <LogicalName>dps.json</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Tasks\ARMTemplates\sajob.json">
+      <Link>Tasks\ARMTemplates\sajob.json</Link>
+      <LogicalName>sajob.json</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

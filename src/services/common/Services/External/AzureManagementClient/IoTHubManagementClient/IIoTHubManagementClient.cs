@@ -20,6 +20,10 @@ namespace Mmm.Iot.Common.Services.External.Azure
 
         IPage<SharedAccessSignatureAuthorizationRule> ListKeysAsync(string iotHubName);
 
+        string GetAccessKey(string iotHubName, string name);
+
         string GetConnectionString(string iotHubName);
+
+        void AddConsumerGroup(string iotHubName, string endpointName, string name, string resourceGroup = null);
     }
 }

@@ -122,7 +122,7 @@ namespace Mmm.Iot.TenantManager.Services.Tasks
                                         item.DpsName,
                                         this.config.Global.Location,
                                         connectionString);
-                                    this.azureManagementClient.DeployTemplateAsync(template);
+                                    await this.azureManagementClient.DeployTemplateAsync(template);
 
                                     item.IsIotHubDeployed = true;
                                     await this.tableStorageClient.InsertOrReplaceAsync<TenantModel>("tenant", item);
@@ -148,7 +148,7 @@ namespace Mmm.Iot.TenantManager.Services.Tasks
                                         this.config.TenantManagerService.TwinChangeEventHubConnectionString,
                                         this.config.TenantManagerService.LifecycleEventHubConnectionString,
                                         this.config.Global.StorageAccountConnectionString);
-                                    this.azureManagementClient.DeployTemplateAsync(template);
+                                    await this.azureManagementClient.DeployTemplateAsync(template);
                                 }
                             }
                         }
